@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Kos;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
@@ -17,23 +18,25 @@ class KosController extends Controller
     private $batas_bawah_harga = 350000;
     private $batas_atas_harga = 1000000;
 
-    public function index(){
+    public function index()
+    {
         $kos = kos::get();
-        return view('kos',[
+        return view('kos', [
             'kos' => $kos,
         ]);
     }
-    public function proses(){
-                $kos = kos::get();
-        
-        for ($i=0; $i < $kos->count() ; $i++) { 
+    public function proses()
+    {
+        $kos = kos::get();
+
+        for ($i = 0; $i < $kos->count(); $i++) {
             $fasilitas = array();
             $fasilitas[$i] = $kos[$i]->ukuran + $kos[$i]->ac + $kos[$i]->parkir + $kos[$i]->kamarmandi + $kos[$i]->wifi;
             // //r1
             // $a1 = min($this->luas_besar($kos[$i]->ukuran), $this->fasilitas_banyak($fasilitas));
             // $z1 = $a1 * ($this->batas_atas_harga - $this->batas_bawah_harga) + $this->batas_bawah_harga;
             // //r2
-            
+
             //R1
             $aPredikat1 = array();
             $z1 = array();
@@ -62,11 +65,11 @@ class KosController extends Controller
             $z_rata_rata[$i] = ($aPredikat1[$i] * $z1[$i] + $aPredikat2[$i] * $z2[$i] + $aPredikat3[$i] * $z3[$i] + $aPredikat4[$i] * $z4[$i]) / ($aPredikat1[$i] + $aPredikat2[$i] + $aPredikat3[$i] + $aPredikat4[$i]);
             $rata_rata[] = $z_rata_rata;
             print_r($z_rata_rata);
-            
         }
-            //return view('proses',compact('rata_rata'));
+        //return view('proses',compact('rata_rata'));
     }
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'name' => 'required',
             'gambar' => 'required|image|max:2048',
@@ -76,30 +79,30 @@ class KosController extends Controller
             'parkir' => 'required',
             'kamarmandi' => 'required',
             'wifi' => 'required'
-        ]);      
+        ]);
         $file = $request->file('gambar');
-        $namegambar = 'public/images/'.Str::random(10).date('d-m-y').'.'.$request->file('gambar')->getClientOriginalExtension();
-        $request->file('gambar')->storeAs('public/images',$namegambar);
+        $namegambar = 'kos/' . Str::random(10) . date('d-m-y') . '.' . $request->file('gambar')->getClientOriginalExtension();
+        $request->file('gambar')->storeAs('kos', $namegambar);
         $save = new Kos;
         $save->fill($request->all());
         if ($request->has('gambar')) {
             $save->gambar = $namegambar;
         }
         $save->save();
-        return Redirect::route('index')->with('message','berhasil menambahkan data');
-
+        return Redirect::route('index')->with('message', 'berhasil menambahkan data');
     }
-    public function fuzzy(){
+    public function fuzzy()
+    {
         $kos = kos::get();
-        
-        for ($i=0; $i < $kos->count() ; $i++) { 
-            $fasilitas =$kos[$i]->ukuran + $kos[$i]->ac + $kos[$i]->parkir + $kos[$i]->kamarmandi + $kos[$i]->wifi;
+
+        for ($i = 0; $i < $kos->count(); $i++) {
+            $fasilitas = $kos[$i]->ukuran + $kos[$i]->ac + $kos[$i]->parkir + $kos[$i]->kamarmandi + $kos[$i]->wifi;
             // //r1
             // $a1 = min($this->luas_besar($kos[$i]->ukuran), $this->fasilitas_banyak($fasilitas));
             // $z1 = $a1 * ($this->batas_atas_harga - $this->batas_bawah_harga) + $this->batas_bawah_harga;
             // //r2
 
-    
+
             $aPredikat1 = min([$this->luas_kecil($kos[$i]->ukuran), $this->fasilitas_banyak($fasilitas)]);
             $z1 = $aPredikat1 * ($this->batas_atas_harga - $this->batas_bawah_harga) +  $this->batas_bawah_harga;
 
@@ -122,65 +125,70 @@ class KosController extends Controller
             $submit = kos::find($kos[$i]->id);
             $submit->hasilfuzzy = $z_rata_rata[$i];
             $submit->save();
-
-
         }
-        return view('hasil',[
-            'kos' => $kos,
+        $sortKos = kos::get()->sortBy('hasilfuzzy');
+        return view('hasil', [
+            'kos' => $sortKos,
         ]);
     }
-     protected function luas_besar($x){
-         if($x <= $this->batas_bawah_luas){
-             return 0;
-         } elseif($x >= $this->batas_bawah_luas && $x <= $this->batas_atas_luas){
-             return ($x - $this->batas_bawah_luas) / ($this->batas_atas_luas - $this->batas_bawah_luas);    
-         } elseif($x >= $this->batas_atas_luas) {
-             return 1;
-         }
-     }
-     protected function luas_kecil($x){
-         if ($x <= $this->batas_bawah_luas) {
-             return 1;
-         } else if ($x >= $this->batas_bawah_luas && $x <= $this->batas_atas_luas) {
-             return ($this->batas_atas_luas - $x) / ($this->batas_atas_luas - $this->batas_bawah_luas);
-         } else if ($x >= $this->batas_atas_luas) {
-             return 0;
-         }
-     }
-     protected function fasilitas_banyak($y){
-         if($y <= $this->batas_bawah_fasilitas){
-             return 0;
-         } elseif($y >= $this->batas_bawah_fasilitas && $y <= $this->batas_atas_fasilitas) {
-             return ($y - $this->batas_bawah_fasilitas) / ($this->batas_atas_fasilitas - $this->batas_bawah_fasilitas);
-         } elseif ($y >= $this->batas_atas_fasilitas) {
-             return 1;
-         }
-     }
-     protected function fasilitas_sedikit($y){
-         if($y <= $this->batas_bawah_fasilitas){
-             return 1;
-         } elseif ($y >= $this->batas_bawah_fasilitas && $y <= $this->batas_atas_fasilitas) {
-             return ($this->batas_bawah_fasilitas - $y) / ($this->batas_atas_fasilitas - $this->batas_bawah_fasilitas);
-         } elseif ($y >= $this->batas_atas_fasilitas) {
-             return 0;
-         }
-     }
-     protected function harga_mahal($z){
-         if ($z <= $this->batas_bawah_harga) {
-             return 0;
-         } elseif ($z >= $this->batas_bawah_harga && $z <= $this->batas_atas_harga) {
-             return ($z - $this->batas_bawah_harga) / ($this->batas_atas_harga - $this->batas_bawah_harga);
-         } elseif ($z >= $this->batas_atas_harga) {
-             return 1;
-         }
-     }
-     protected function harga_murah($z){
-         if ($z <= $this->batas_bawah_harga) {
-             return 1;
-         } elseif ($z >= $this->batas_bawah_harga && $z <= $this->batas_atas_harga) {
-             return ($z - $this->batas_bawah_harga) / ($this->batas_atas_harga - $this->batas_bawah_harga);
-         } elseif ($z >= $this->batas_atas_harga) {
-             return 0;
-         }
-     }
+    protected function luas_besar($x)
+    {
+        if ($x <= $this->batas_bawah_luas) {
+            return 0;
+        } elseif ($x >= $this->batas_bawah_luas && $x <= $this->batas_atas_luas) {
+            return ($x - $this->batas_bawah_luas) / ($this->batas_atas_luas - $this->batas_bawah_luas);
+        } elseif ($x >= $this->batas_atas_luas) {
+            return 1;
+        }
+    }
+    protected function luas_kecil($x)
+    {
+        if ($x <= $this->batas_bawah_luas) {
+            return 1;
+        } else if ($x >= $this->batas_bawah_luas && $x <= $this->batas_atas_luas) {
+            return ($this->batas_atas_luas - $x) / ($this->batas_atas_luas - $this->batas_bawah_luas);
+        } else if ($x >= $this->batas_atas_luas) {
+            return 0;
+        }
+    }
+    protected function fasilitas_banyak($y)
+    {
+        if ($y <= $this->batas_bawah_fasilitas) {
+            return 0;
+        } elseif ($y >= $this->batas_bawah_fasilitas && $y <= $this->batas_atas_fasilitas) {
+            return ($y - $this->batas_bawah_fasilitas) / ($this->batas_atas_fasilitas - $this->batas_bawah_fasilitas);
+        } elseif ($y >= $this->batas_atas_fasilitas) {
+            return 1;
+        }
+    }
+    protected function fasilitas_sedikit($y)
+    {
+        if ($y <= $this->batas_bawah_fasilitas) {
+            return 1;
+        } elseif ($y >= $this->batas_bawah_fasilitas && $y <= $this->batas_atas_fasilitas) {
+            return ($this->batas_bawah_fasilitas - $y) / ($this->batas_atas_fasilitas - $this->batas_bawah_fasilitas);
+        } elseif ($y >= $this->batas_atas_fasilitas) {
+            return 0;
+        }
+    }
+    protected function harga_mahal($z)
+    {
+        if ($z <= $this->batas_bawah_harga) {
+            return 0;
+        } elseif ($z >= $this->batas_bawah_harga && $z <= $this->batas_atas_harga) {
+            return ($z - $this->batas_bawah_harga) / ($this->batas_atas_harga - $this->batas_bawah_harga);
+        } elseif ($z >= $this->batas_atas_harga) {
+            return 1;
+        }
+    }
+    protected function harga_murah($z)
+    {
+        if ($z <= $this->batas_bawah_harga) {
+            return 1;
+        } elseif ($z >= $this->batas_bawah_harga && $z <= $this->batas_atas_harga) {
+            return ($z - $this->batas_bawah_harga) / ($this->batas_atas_harga - $this->batas_bawah_harga);
+        } elseif ($z >= $this->batas_atas_harga) {
+            return 0;
+        }
+    }
 }

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('parkir');
             $table->string('kamarmandi');
             $table->string('wifi');
+            $table->string('hasilfuzzy')->default("");
             $table->timestamps();
         });
     }
