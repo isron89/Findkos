@@ -7,19 +7,19 @@
 			@if(Session::has('message'))
 			<p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
 			@endif
-			<form action="{{route('kos_store')}}" method="post" enctype="multipart/form-data">
+			<form action="{{route('update')}}" method="post" enctype="multipart/form-data">
 				{{csrf_field()}}
 				<div class="mb-3">
 					<label for="exampleFormControlInput1" class="form-label">Nama Kos</label>
-					<input type="name" class="form-control" name="name" id="exampleFormControlInput1" placeholder="Kos Melati">
+					<input type="name" class="form-control" name="name" id="exampleFormControlInput1" placeholder="Kos Melati" value="{{old('name',$kos->name)}}">
 				</div>
 				<div class="mb-3">
 					<label for="exampleFormControlInput1" class="form-label">Ukuran Kos</label>
-					<input type="number" class="form-control" name="ukuran" id="exampleFormControlInput2" placeholder="4 (dalam meter persegi)">
+					<input type="number" class="form-control" name="ukuran" id="exampleFormControlInput2" placeholder="4 (dalam meter persegi)" value="{{old('name',$kos->ukuran)}}">
 				</div>
 				<div class="mb-3">
 					<label for="exampleFormControlInput1" class="form-label">Harga</label>
-					<input type="number" class="form-control" name="harga" id="exampleFormControlInput3" placeholder="500000">
+					<input type="number" class="form-control" name="harga" id="exampleFormControlInput3" placeholder="500000" value="{{old('name',$kos->harga)}}">
 				</div>
 				<div class="input-group mb-3">
 					<input type="file" class="form-control" id="inputGroupFile03" name="gambar" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
@@ -27,7 +27,7 @@
 
 				<div class="mb-3">
 					<label for="disabledSelect" class="form-label">AC</label>
-					<select id="disabledSelect" name="ac" class="form-select">
+					<select id="disabledSelect" name="ac" class="form-select" value="{{old('name',$kos->ac)}}">
 						<option>Pilih Salah Satu</option>
 						<option value="10">Ada</option>
 						<option value="0">Tidak Ada</option>
@@ -36,7 +36,7 @@
 
 				<div class="mb-3">
 					<label for="disabledSelect" class="form-label">Parkir</label>
-					<select id="disabledSelect" name="parkir" class="form-select">
+					<select id="disabledSelect" name="parkir" class="form-select" value="{{old('name',$kos->parkir)}}">
 						<option>Pilih Salah Satu</option>
 						<option value="20">Luas</option>
 						<option value="10">Sedang</option>
@@ -45,7 +45,7 @@
 				</div>
 				<div class="mb-3">
 					<label for="disabledSelect" class="form-label">Kamar Mandi</label>
-					<select id="disabledSelect" name="kamarmandi" class="form-select">
+					<select id="disabledSelect" name="kamarmandi" class="form-select" value="{{old('name',$kos->kamarmandi)}}">
 						<option>Pilih Salah Satu</option>
 						<option value="50">Dalam (Luas)</option>
 						<option value="25">Dalam (Sedang)</option>
@@ -54,7 +54,7 @@
 				</div>
 				<div class="mb-3">
 					<label for="disabledSelect" class="form-label">Wifi</label>
-					<select id="disabledSelect" name="wifi" class="form-select">
+					<select id="disabledSelect" name="wifi" class="form-select" value="{{old('name',$kos->wifi)}}">
 						<option>Pilih Salah Satu</option>
 						<option value="50">Ada (Koneksi Cepat)</option>
 						<option value="25">Ada (Koneksi Sedang)</option>
@@ -71,36 +71,5 @@
 
 	</div>
 </div>
-{{-- table --}}
-<div class="table-responsive">
-	<table class="table">
-		<thead>
-			<tr>
-				<th scope="col">#</th>
-				<th scope="col">Nama kos</th>
-				<th scope="col">harga</th>
-				<th scope="col">created</th>
-				<th scope="col">action</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach($kos as $datakos)
-			<tr>
-				<th scope="row">{{$loop->iteration}}</th>
-				<td>{{$datakos->name}}</td>
-				<td>@rupiah($datakos->harga)</td>
-				<td>{{$datakos->created_at}}</td>
-				<td>
-					<a href="{{ route('edit', [$datakos->id]) }}"><button type="button" class="btn btn-primary btn-sm">Edit</button></a>
-					<form method="POST" action="{{ route('delete', [$datakos->id]) }}">
-						@csrf
-						{{ method_field('DELETE') }}
-						<button type="submit" class="btn btn-danger btn-sm">Delete</button>
-					</form>
-				</td>
-			</tr>
-			@endforeach
-		</tbody>
-	</table>
-</div>
+
 @endsection

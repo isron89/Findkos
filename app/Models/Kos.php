@@ -8,5 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Kos extends Model
 {
     use HasFactory;
-    protected $fillable = ['name','harga','gambar','ac','ukuran','kamarmandi','parkir','wifi'];
+    public $incrementing = false;
+    protected $casts = [
+        'id' => 'string',
+    ];
+    protected $keyType = 'string';
+    protected $fillable = ['name', 'harga', 'gambar', 'ac', 'ukuran', 'kamarmandi', 'parkir', 'wifi'];
 }

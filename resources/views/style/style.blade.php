@@ -15,7 +15,7 @@
   <main>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="{{route('index')}}"><img class="card-img-top" src="{{asset('storage/images/findkos.jpg')}}" alt="Title" style="max-width: 100%; max-height: 100%; height: 30px; width: 30px;"></a>
+        <a class="navbar-brand" href="{{route('index')}}"><img class="card-img-top" src="{{asset('storage/images/findkos.jpg')}}" alt="Title" style="max-width: 100%; max-height: 100%; height: 40px; width: 40px;"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>

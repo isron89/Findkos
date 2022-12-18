@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Storage;
 
 class KosController extends Controller
 {
@@ -81,8 +81,10 @@ class KosController extends Controller
             'wifi' => 'required'
         ]);
         $file = $request->file('gambar');
-        $namegambar = 'kos/' . Str::random(10) . date('d-m-y') . '.' . $request->file('gambar')->getClientOriginalExtension();
-        $request->file('gambar')->storeAs('kos', $namegambar);
+        $namegambar = Str::random(10) . date('d-m-y') . '.' . $request->file('gambar')->getClientOriginalExtension();
+        $request->file('gambar')->storeAs('public/', $namegambar, 'public');
+        // Storage::putFileAs('storage/images', $file, $namegambar);
+        // Storage::disk('public')->put($namegambar, $file);
         $save = new Kos;
         $save->fill($request->all());
         if ($request->has('gambar')) {
@@ -131,6 +133,45 @@ class KosController extends Controller
             'kos' => $sortKos,
         ]);
     }
+
+    public function editKos($id)
+    {
+        $kos = kos::findOrFail($id);
+        return view('editkos', compact('kos'));
+    }
+
+    public function updateKos(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required',
+            'gambar' => 'required|image|max:2048',
+            'harga' => 'required',
+            'ukuran' => 'required',
+            'ac' => 'required',
+            'parkir' => 'required',
+            'kamarmandi' => 'required',
+            'wifi' => 'required'
+        ]);
+        $file = $request->file('gambar');
+        $namegambar = Str::random(10) . date('d-m-y') . '.' . $request->file('gambar')->getClientOriginalExtension();
+        $request->file('gambar')->storeAs('public/', $namegambar, 'public');
+
+        $save = kos::find($id);
+        $save->fill($request->all());
+        if ($request->has('gambar')) {
+            $save->gambar = $namegambar;
+        }
+        $save->save();
+        return Redirect::route('index')->with('message', 'berhasil mengubah data');
+    }
+
+    public function deleteKos($id)
+    {
+        $kos = kos::findOrFail($id);
+        $kos->delete();
+        return Redirect::route('index')->with('message', 'berhasil menghapus data');
+    }
+
     protected function luas_besar($x)
     {
         if ($x <= $this->batas_bawah_luas) {
