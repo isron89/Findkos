@@ -18,14 +18,15 @@ return new class extends Migration
             // $table->id();
             $table->uuid('id')->primary()->default(DB::raw('(UUID())'));
             $table->string('name');
-            $table->string('gambar');
+            $table->string('gambar')->nullable();
             $table->integer('harga');
             $table->string('ukuran');
             $table->string('ac');
             $table->string('parkir');
             $table->string('kamarmandi');
             $table->string('wifi');
-            $table->string('hasilfuzzy')->default("");
+            $table->integer('hasil_fuzzy')->default(0);
+            $table->integer('delta_harga')->default(0);
             $table->timestamps();
         });
     }

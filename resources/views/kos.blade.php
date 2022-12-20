@@ -11,25 +11,27 @@
 				{{csrf_field()}}
 				<div class="mb-3">
 					<label for="exampleFormControlInput1" class="form-label">Nama Kos</label>
-					<input type="name" class="form-control" name="name" id="exampleFormControlInput1" placeholder="Kos Melati">
+					<input type="name" class="form-control" name="name" id="exampleFormControlInput1" placeholder="Kos Melati" required>
 				</div>
 				<div class="mb-3">
 					<label for="exampleFormControlInput1" class="form-label">Ukuran Kos</label>
-					<input type="number" class="form-control" name="ukuran" id="exampleFormControlInput2" placeholder="4 (dalam meter persegi)">
+					<input type="number" class="form-control" name="ukuran" id="exampleFormControlInput2" placeholder="4 (dalam meter persegi)" required>
 				</div>
 				<div class="mb-3">
 					<label for="exampleFormControlInput1" class="form-label">Harga</label>
-					<input type="number" class="form-control" name="harga" id="exampleFormControlInput3" placeholder="500000">
+					<input type="number" class="form-control" name="harga" id="exampleFormControlInput3" placeholder="500000" required>
 				</div>
+				<!-- <label for="exampleFormControlInput1" class="form-label">Gambar</label><br>
 				<div class="input-group mb-3">
 					<input type="file" class="form-control" id="inputGroupFile03" name="gambar" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
-				</div>
+				</div> -->
 
 				<div class="mb-3">
-					<label for="disabledSelect" class="form-label">AC</label>
+					<label for="disabledSelect" class="form-label">Penyejuk</label>
 					<select id="disabledSelect" name="ac" class="form-select">
 						<option>Pilih Salah Satu</option>
-						<option value="10">Ada</option>
+						<option value="20">AC</option>
+						<option value="10">Kipas angin</option>
 						<option value="0">Tidak Ada</option>
 					</select>
 				</div>
@@ -47,8 +49,8 @@
 					<label for="disabledSelect" class="form-label">Kamar Mandi</label>
 					<select id="disabledSelect" name="kamarmandi" class="form-select">
 						<option>Pilih Salah Satu</option>
-						<option value="50">Dalam (Luas)</option>
-						<option value="25">Dalam (Sedang)</option>
+						<option value="30">Dalam (Luas)</option>
+						<option value="20">Dalam (Sedang)</option>
 						<option value="10">Luar</option>
 					</select>
 				</div>
@@ -56,8 +58,8 @@
 					<label for="disabledSelect" class="form-label">Wifi</label>
 					<select id="disabledSelect" name="wifi" class="form-select">
 						<option>Pilih Salah Satu</option>
-						<option value="50">Ada (Koneksi Cepat)</option>
-						<option value="25">Ada (Koneksi Sedang)</option>
+						<option value="30">Ada (Koneksi Cepat)</option>
+						<option value="20">Ada (Koneksi Sedang)</option>
 						<option value="10">Ada (Koneksi Lambat)</option>
 						<option value="0">Tidak Ada</option>
 					</select>
