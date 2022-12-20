@@ -15,11 +15,12 @@ use App\Http\Controllers\KosController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('page.home');
 });
 
 Route::controller(KosController::class)->group(function () {
     Route::get('/', 'index')->name('index');
+    Route::get('/home', 'home')->name('home');
     //Route::get('/kos/{id}', 'show');
     //create
     Route::post('/kos', 'store')->name('kos_store');

@@ -11,12 +11,6 @@ use Illuminate\Support\Facades\Storage;
 
 class KosController extends Controller
 {
-    // private $batas_bawah_luas = 5;
-    // private $batas_atas_luas = 20;
-    // private $batas_bawah_fasilitas = 50;
-    // private $batas_atas_fasilitas = 130;
-    // private $batas_bawah_harga = 350000;
-    // private $batas_atas_harga = 1000000;
     private $batas_bawah_luas = 3;
     private $batas_atas_luas = 10;
     private $batas_bawah_fasilitas = 30;
@@ -27,8 +21,13 @@ class KosController extends Controller
 
     public function index()
     {
+        return view('page.home');
+    }
+
+    public function home()
+    {
         $kos = kos::get();
-        return view('kos', [
+        return view('page.kos', [
             'kos' => $kos,
         ]);
     }
@@ -45,9 +44,7 @@ class KosController extends Controller
             'kamarmandi' => 'required',
             'wifi' => 'required'
         ]);
-        // $file = $request->file('gambar');
-        // Storage::putFileAs('storage/images', $file, $namegambar);
-        // Storage::disk('public')->put($namegambar, $file);
+
         $save = new Kos;
         $save->fill($request->all());
         if ($request->hasFile('gambar')) {
@@ -58,6 +55,7 @@ class KosController extends Controller
         $save->save();
         return Redirect::route('index')->with('message', 'Berhasil menambahkan data!');
     }
+
     public function fuzzy()
     {
         $kos = kos::get();
@@ -65,23 +63,20 @@ class KosController extends Controller
         for ($i = 0; $i < $kos->count(); $i++) {
             $fasilitas = $kos[$i]->ukuran + $kos[$i]->ac + $kos[$i]->parkir + $kos[$i]->kamarmandi + $kos[$i]->wifi;
 
+            //R1
             $aPredikat1 = min([$this->luas_kecil($kos[$i]->ukuran), $this->fasilitas_banyak($fasilitas)]);
-            // $z1 = $aPredikat1 * ($this->batas_atas_harga - $this->batas_bawah_harga) +  $this->batas_bawah_harga;
             $z1 = $this->harga_mahal($aPredikat1);
 
             // R2
             $aPredikat2 = min([$this->luas_kecil($kos[$i]->ukuran), $this->fasilitas_sedikit($fasilitas)]);
-            // $z2 = ($aPredikat2 * ($this->batas_atas_harga -  $this->batas_bawah_harga) - $this->batas_atas_harga) * -1;
             $z2 = $this->harga_murah($aPredikat2);
 
             // R3
             $aPredikat3 = min([$this->luas_besar($kos[$i]->ukuran), $this->fasilitas_banyak($fasilitas)]);
-            // $z3 = $aPredikat3 * ($this->batas_atas_harga -  $this->batas_bawah_harga) +  $this->batas_bawah_harga;
             $z3 = $this->harga_mahal($aPredikat3);
 
             // R4
             $aPredikat4 = min([$this->luas_besar($kos[$i]->ukuran), $this->fasilitas_sedikit($fasilitas)]);
-            // $z4 = ($aPredikat4 * ($this->batas_atas_harga -  $this->batas_bawah_harga) - $this->batas_atas_harga) * -1;
             $z4 = $this->harga_murah($aPredikat4);
 
             //defuzzyfikasi
@@ -95,7 +90,7 @@ class KosController extends Controller
             $submit->save();
         }
         $sortKos = kos::get()->sortByDesc('delta_harga');
-        return view('hasil', [
+        return view('page.hasil', [
             'kos' => $sortKos,
         ]);
     }
@@ -103,7 +98,7 @@ class KosController extends Controller
     public function editKos($id)
     {
         $kos = kos::findOrFail($id);
-        return view('editkos', compact('kos'));
+        return view('page.editkos', compact('kos'));
     }
 
     public function updateKos(Request $request, $id)

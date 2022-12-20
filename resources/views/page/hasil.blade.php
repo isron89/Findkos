@@ -6,7 +6,6 @@
   @foreach($kos as $datakos)
   <div class="card-deck col-sm-3">
     <div class="card" style="width: 18rem;">
-      <!-- <img class="card-img-top" src="{{ storage_path('kos/'.$datakos->gambar) }}" alt="Card image cap"> -->
       <img class="card-img-top" src="{{ file_exists(asset('storage/'.$datakos->gambar)) ? asset('storage/'.$datakos->gambar) : asset('storage/images/kos.png') }} " alt="Card image cap">
       <!-- <img class="card-img-top" src="{{ Storage::disk('public')->url($datakos->gambar); }}" alt="Card image cap"> -->
       <div class="card-body">
