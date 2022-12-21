@@ -16,5 +16,3 @@ php artisan migrate
 php artisan serve
 ```
 - access localhost:8000
-
-<br>Thanks to all [reference](https://github.com/)
