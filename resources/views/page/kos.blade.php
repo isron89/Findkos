@@ -9,70 +9,88 @@
 			@endif
 			<form action="{{route('kos_store')}}" method="post" enctype="multipart/form-data">
 				{{csrf_field()}}
+				@error('name')
+				<p class="alert alert-danger">{{ $message }}</p>
+				@enderror
 				<div class="mb-3">
-					<label for="exampleFormControlInput1" class="form-label">Nama Kos</label>
-					<input type="name" class="form-control" name="name" id="exampleFormControlInput1" placeholder="Kos Melati" required>
+					<label for="formcontrol" class="form-label">Nama Kos</label>
+					<input type="text" class="form-control" name="name" id="name" placeholder="Kos Melati" value="{{ old('name') }}" required>
 				</div>
+				@error('ukuran')
+				<p class="alert alert-danger">{{ $message }}</p>
+				@enderror
 				<div class="mb-3">
-					<label for="exampleFormControlInput1" class="form-label">Ukuran Kos</label>
-					<input type="number" class="form-control" name="ukuran" id="exampleFormControlInput2" placeholder="4 (dalam meter persegi)" required>
+					<label for="formcontrol" class="form-label">Ukuran Kos</label>
+					<input type="number" class="form-control" name="ukuran" id="ukuran" placeholder="4 (dalam meter persegi)" value="{{ old('ukuran') }}" required>
 				</div>
+				@error('harga')
+				<p class="alert alert-danger">{{ $message }}</p>
+				@enderror
 				<div class="mb-3">
-					<label for="exampleFormControlInput1" class="form-label">Harga</label>
-					<input type="number" class="form-control" name="harga" id="exampleFormControlInput3" placeholder="500000" required>
+					<label for="formcontrol" class="form-label">Harga</label>
+					<input type="number" class="form-control" name="harga" id="harga" placeholder="500000" value="{{ old('harga') }}" required>
 				</div>
 				<!-- <label for="exampleFormControlInput1" class="form-label">Gambar</label><br>
 				<div class="input-group mb-3">
 					<input type="file" class="form-control" id="inputGroupFile03" name="gambar" aria-describedby="inputGroupFileAddon03" aria-label="Upload">
 				</div> -->
-
+				@error('ac')
+				<p class="alert alert-danger">{{ $message }}</p>
+				@enderror
 				<div class="mb-3">
 					<label for="disabledSelect" class="form-label">Penyejuk</label>
-					<select id="disabledSelect" name="ac" class="form-select">
-						<option>Pilih Salah Satu</option>
+					<select id="penyejuk" name="ac" class="form-select" required>
+						<option value="" disabled selected hidden>Pilih Salah Satu</option>
 						<option value="20">AC</option>
 						<option value="10">Kipas angin</option>
 						<option value="0">Tidak Ada</option>
 					</select>
 				</div>
-
+				@error('parkir')
+				<p class="alert alert-danger">{{ $message }}</p>
+				@enderror
 				<div class="mb-3">
 					<label for="disabledSelect" class="form-label">Parkir</label>
-					<select id="disabledSelect" name="parkir" class="form-select">
-						<option>Pilih Salah Satu</option>
+					<select id="parkir" name="parkir" class="form-select" required>
+						<option value="" disabled selected hidden>Pilih Salah Satu</option>
 						<option value="20">Luas</option>
 						<option value="10">Sedang</option>
 						<option value="0">Tidak Ada</option>
 					</select>
 				</div>
+				@error('kamarmandi')
+				<p class="alert alert-danger">{{ $message }}</p>
+				@enderror
 				<div class="mb-3">
 					<label for="disabledSelect" class="form-label">Kamar Mandi</label>
-					<select id="disabledSelect" name="kamarmandi" class="form-select">
-						<option>Pilih Salah Satu</option>
+					<select id="kamarmandi" name="kamarmandi" class="form-select" required>
+						<option value="" disabled selected hidden>Pilih Salah Satu</option>
 						<option value="30">Dalam (Luas)</option>
 						<option value="20">Dalam (Sedang)</option>
 						<option value="10">Luar</option>
 					</select>
 				</div>
+				@error('wifi')
+				<p class="alert alert-danger">{{ $message }}</p>
+				@enderror
 				<div class="mb-3">
 					<label for="disabledSelect" class="form-label">Wifi</label>
-					<select id="disabledSelect" name="wifi" class="form-select">
-						<option>Pilih Salah Satu</option>
+					<select id="wifi" name="wifi" class="form-select" required>
+						<option value="" disabled selected hidden>Pilih Salah Satu</option>
 						<option value="30">Ada (Koneksi Cepat)</option>
 						<option value="20">Ada (Koneksi Sedang)</option>
 						<option value="10">Ada (Koneksi Lambat)</option>
 						<option value="0">Tidak Ada</option>
 					</select>
 				</div>
-
 				<div class="d-grid gap-2 d-md-flex justify-content-md-end">
 					<button class="btn btn-primary me-md-2" type="submit">Simpan</button>
 				</div>
 			</form>
 		</div>
-
 	</div>
 </div>
+
 {{-- table --}}
 <div class="table-responsive">
 	<table class="table">
@@ -93,11 +111,11 @@
 				<td>@rupiah($datakos->harga)</td>
 				<td>{{$datakos->created_at}}</td>
 				<td>
-					<a href="{{ route('edit', [$datakos->id]) }}"><button type="button" class="btn btn-primary btn-sm">Edit</button></a>
+					<a href="{{ route('edit', [$datakos->id]) }}"><button type="button" class="btn btn-primary btn-sm">Detail</button></a>
 					<form method="POST" action="{{ route('delete', [$datakos->id]) }}">
 						@csrf
 						{{ method_field('DELETE') }}
-						<button type="submit" class="btn btn-danger btn-sm">Delete</button>
+						<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item')">Delete</button>
 					</form>
 				</td>
 			</tr>

@@ -17,14 +17,14 @@ return new class extends Migration
         Schema::create('kos', function (Blueprint $table) {
             // $table->id();
             $table->uuid('id')->primary()->default(DB::raw('(UUID())'));
-            $table->string('name');
+            $table->string('name')->nullable(false);
             $table->string('gambar')->nullable();
-            $table->integer('harga');
-            $table->string('ukuran');
-            $table->string('ac');
-            $table->string('parkir');
-            $table->string('kamarmandi');
-            $table->string('wifi');
+            $table->integer('harga')->nullable(false);
+            $table->integer('ukuran')->nullable(false);
+            $table->integer('ac')->nullable(false);
+            $table->integer('parkir')->nullable(false);
+            $table->integer('kamarmandi')->nullable(false);
+            $table->integer('wifi')->nullable(false);
             $table->integer('hasil_fuzzy')->default(0);
             $table->integer('delta_harga')->default(0);
             $table->timestamps();

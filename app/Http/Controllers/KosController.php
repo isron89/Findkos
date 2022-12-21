@@ -52,8 +52,13 @@ class KosController extends Controller
             $request->file('gambar')->storeAs('public/', $namegambar, 'public');
             $save->gambar = $namegambar;
         }
-        $save->save();
-        return Redirect::route('index')->with('message', 'Berhasil menambahkan data!');
+        try {
+            $save->save();
+            return redirect()->route('home')->with(['message' => 'Kos berhasil ditambahkan']);
+        } catch (\Throwable $th) {
+            report($th);
+            return redirect()->route('home')->with(['message' => 'Kos gagal ditambahkan']);
+        }
     }
 
     public function fuzzy()
@@ -145,14 +150,14 @@ class KosController extends Controller
         }
 
         //redirect to index
-        return redirect()->route('index')->with(['message' => 'Berhasil mengubah data!']);
+        return redirect()->route('home')->with(['message' => 'Berhasil mengubah data!']);
     }
 
     public function deleteKos($id)
     {
         $kos = kos::findOrFail($id);
         $kos->delete();
-        return Redirect::route('index')->with('message', 'Berhasil menghapus data!');
+        return Redirect::route('home')->with('message', 'Berhasil menghapus data!');
     }
 
     protected function luas_besar($x)
