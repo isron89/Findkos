@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\Storage;
 
 class KosController extends Controller
 {
-    private $batas_bawah_luas = 9;
-    private $batas_atas_luas = 20;
+    private $batas_bawah_luas = 7;
+    private $batas_atas_luas = 14;
     private $batas_bawah_fasilitas = 30;
-    private $batas_atas_fasilitas = 80;
+    private $batas_atas_fasilitas = 100;
     private $batas_bawah_harga = 300000;
-    private $batas_mid_harga = 900000;
+    private $batas_mid_harga = 1200000;
     private $batas_atas_harga = 1500000;
 
     public function index()
@@ -64,6 +64,9 @@ class KosController extends Controller
     public function fuzzy()
     {
         $kos = kos::get();
+        if ($kos->count() == 0) {
+            return redirect()->route('home')->with(['message' => 'Data kos kosong']);
+        }
 
         for ($i = 0; $i < $kos->count(); $i++) {
             $fasilitas = $kos[$i]->ukuran + $kos[$i]->ac + $kos[$i]->parkir + $kos[$i]->kamarmandi + $kos[$i]->wifi;
@@ -162,44 +165,44 @@ class KosController extends Controller
 
     protected function luas_besar($x)
     {
-        if ($x < $this->batas_bawah_luas) {
+        if ($x <= $this->batas_bawah_luas) {
             return 0;
         } elseif ($x >= $this->batas_bawah_luas && $x <= $this->batas_atas_luas) {
             return ($x - $this->batas_bawah_luas) / ($this->batas_atas_luas - $this->batas_bawah_luas);
-        } elseif ($x > $this->batas_atas_luas) {
+        } elseif ($x >= $this->batas_atas_luas) {
             return 1;
         }
     }
 
     protected function luas_kecil($x)
     {
-        if ($x < $this->batas_bawah_luas) {
+        if ($x <= $this->batas_bawah_luas) {
             return 1;
         } else if ($x >= $this->batas_bawah_luas && $x <= $this->batas_atas_luas) {
             return ($this->batas_atas_luas - $x) / ($this->batas_atas_luas - $this->batas_bawah_luas);
-        } else if ($x > $this->batas_atas_luas) {
+        } else if ($x >= $this->batas_atas_luas) {
             return 0;
         }
     }
 
     protected function fasilitas_banyak($y)
     {
-        if ($y < $this->batas_bawah_fasilitas) {
+        if ($y <= $this->batas_bawah_fasilitas) {
             return 0;
         } elseif ($y >= $this->batas_bawah_fasilitas && $y <= $this->batas_atas_fasilitas) {
             return ($y - $this->batas_bawah_fasilitas) / ($this->batas_atas_fasilitas - $this->batas_bawah_fasilitas);
-        } elseif ($y > $this->batas_atas_fasilitas) {
+        } elseif ($y >= $this->batas_atas_fasilitas) {
             return 1;
         }
     }
 
     protected function fasilitas_sedikit($y)
     {
-        if ($y < $this->batas_bawah_fasilitas) {
+        if ($y <= $this->batas_bawah_fasilitas) {
             return 1;
         } elseif ($y >= $this->batas_bawah_fasilitas && $y <= $this->batas_atas_fasilitas) {
             return ($this->batas_atas_fasilitas - $y) / ($this->batas_atas_fasilitas - $this->batas_bawah_fasilitas);
-        } elseif ($y > $this->batas_atas_fasilitas) {
+        } elseif ($y >= $this->batas_atas_fasilitas) {
             return 0;
         }
     }

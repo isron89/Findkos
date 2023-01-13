@@ -65,9 +65,9 @@
 					<label for="disabledSelect" class="form-label">Kamar Mandi</label>
 					<select id="kamarmandi" name="kamarmandi" class="form-select" required>
 						<option value="" disabled selected hidden>Pilih Salah Satu</option>
-						<option value="30">Dalam (Luas)</option>
-						<option value="20">Dalam (Sedang)</option>
-						<option value="10">Luar</option>
+						<option value="30">Dalam</option>
+						<!-- <option value="20">Dalam (Sedang)</option> -->
+						<option value="15">Luar</option>
 					</select>
 				</div>
 				@error('wifi')
@@ -104,6 +104,7 @@
 			</tr>
 		</thead>
 		<tbody>
+			@if($kos->count() > 0)
 			@foreach($kos as $datakos)
 			<tr>
 				<th scope="row">{{$loop->iteration}}</th>
@@ -120,6 +121,11 @@
 				</td>
 			</tr>
 			@endforeach
+			@else
+			<tr>
+				<td colspan="5" class="text-center">Tidak ada data</td>
+			</tr>
+			@endif
 		</tbody>
 	</table>
 </div>

@@ -44,9 +44,9 @@
 				<div class="mb-3">
 					<label for="disabledSelect" class="form-label">Kamar Mandi</label>
 					<select id="kamarmandi" name="kamarmandi" class="form-select" required>
-						<option value="30" @if ($kos->kamarmandi == "30" ) {{ 'selected' }} @endif>Dalam (Luas)</option>
-						<option value="20" @if ($kos->kamarmandi == "20" ) {{ 'selected' }} @endif>Dalam (Sedang)</option>
-						<option value="10" @if ($kos->kamarmandi == "10" ) {{ 'selected' }} @endif>Luar</option>
+						<option value="30" @if ($kos->kamarmandi == "30" ) {{ 'selected' }} @endif>Dalam</option>
+						<!-- <option value="20" @if ($kos->kamarmandi == "20" ) {{ 'selected' }} @endif>Dalam (Sedang)</option> -->
+						<option value="10" @if ($kos->kamarmandi == "15" ) {{ 'selected' }} @endif>Luar</option>
 					</select>
 				</div>
 				<div class="mb-3">
