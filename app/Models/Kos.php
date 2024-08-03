@@ -13,5 +13,5 @@ class Kos extends Model
         'id' => 'string',
     ];
     protected $keyType = 'string';
-    protected $fillable = ['name', 'harga', 'gambar', 'ac', 'ukuran', 'kamarmandi', 'parkir', 'wifi'];
+    protected $fillable = ['id', 'name', 'harga', 'gambar', 'ac', 'ukuran', 'kamarmandi', 'parkir', 'wifi'];
 }

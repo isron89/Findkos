@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('kos', function (Blueprint $table) {
             // $table->id();
-            $table->uuid('id')->primary()->default(DB::raw('(UUID())'));
+            $table->uuid('id')->primary();
             $table->string('name')->nullable(false);
             $table->string('gambar')->nullable();
             $table->integer('harga')->nullable(false);

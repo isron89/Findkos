@@ -46,6 +46,7 @@ class KosController extends Controller
         ]);
 
         $save = new Kos;
+        $save->id = Str::uuid();
         $save->fill($request->all());
         if ($request->hasFile('gambar')) {
             $namegambar = Str::random(10) . date('d-m-y') . '.' . $request->file('gambar')->getClientOriginalExtension();
